@@ -10,10 +10,10 @@ async function Page() {
   const userData = {
     id: user?.id,
     objectId: userInfo?._id,
-    username: userInfo?.username || user?.username,
-    name: userInfo?.name || user?.firstName || "",
     bio: userInfo?.bio || "",
     image: userInfo?.image || user?.imageUrl,
+    name: userInfo?.name || user?.firstName || "",
+    username: userInfo?.username || user?.username,
   };
   return (
     <main className="mx-auto flex max-w-3xl flex-col justify-start px-10 py-20">
