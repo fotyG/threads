@@ -5,25 +5,34 @@ import { revalidatePath } from "next/cache";
 import User from "@/lib/models/user.model";
 import { connectToDB } from "@/lib/mongoose";
 
-export async function updateUser(
-  userId: string,
-  username: string,
-  name: string,
-  bio: string,
-  image: string,
-  path: string
-): Promise<void> {
+type updateUserType = {
+  bio: string;
+  name: string;
+  path: string;
+  image: string;
+  userId: string;
+  username: string;
+};
+
+export async function updateUser({
+  bio,
+  path,
+  name,
+  image,
+  userId,
+  username,
+}: updateUserType): Promise<void> {
   connectToDB();
 
   try {
     await User.findOneAndUpdate(
       { id: userId },
       {
-        username: username.toLowerCase(),
-        name,
         bio,
+        name,
         image,
         oboarded: true,
+        username: username.toLowerCase(),
       },
       { upsert: true }
     );

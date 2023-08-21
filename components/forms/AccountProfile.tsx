@@ -4,8 +4,8 @@ import * as z from "zod";
 import Image from "next/image";
 import { useForm } from "react-hook-form";
 import { ChangeEvent, useState } from "react";
-import { useUploadThing } from "@/lib/uploadthing";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { usePathname, useRouter } from "next/navigation";
 
 import {
   Form,
@@ -14,11 +14,13 @@ import {
   FormField,
   FormControl,
 } from "@/components/ui/form";
+import { isBase64Image } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { useUploadThing } from "@/lib/uploadthing";
 import { Textarea } from "@/components/ui/textarea";
+import { updateUser } from "@/lib/actions/user.actions";
 import { UserValidation } from "@/lib/validations/user";
-import { isBase64Image } from "@/lib/utils";
 
 interface Props {
   user: {
@@ -35,6 +37,9 @@ interface Props {
 const AccountProfile = ({ user, btnTitle }: Props) => {
   const [files, setFiles] = useState<File[]>([]);
   const { startUpload } = useUploadThing("media");
+
+  const router = useRouter();
+  const pathname = usePathname();
 
   const form = useForm({
     resolver: zodResolver(UserValidation),
@@ -84,7 +89,14 @@ const AccountProfile = ({ user, btnTitle }: Props) => {
       }
     }
 
-    // TODO: Update user profile
+    await updateUser({
+      path: pathname,
+      bio: values.bio,
+      userId: user.id,
+      name: values.name,
+      username: values.username,
+      image: values.profile_photo,
+    });
   }
 
   return (
@@ -94,18 +106,18 @@ const AccountProfile = ({ user, btnTitle }: Props) => {
         className="flex flex-col justify-start gap-10"
       >
         <FormField
-          control={form.control}
           name="profile_photo"
+          control={form.control}
           render={({ field }) => (
             <FormItem className="flex items-center gap-4">
               <FormLabel className="account-form_image-label">
                 {field.value ? (
                   <Image
-                    src={field.value}
-                    alt="profile photo"
+                    priority
                     width={96}
                     height={96}
-                    priority
+                    src={field.value}
+                    alt="profile photo"
                     className="rounded-full object-contain"
                   />
                 ) : (
@@ -132,8 +144,8 @@ const AccountProfile = ({ user, btnTitle }: Props) => {
         />
 
         <FormField
-          control={form.control}
           name="name"
+          control={form.control}
           render={({ field }) => (
             <FormItem className="flex flex-col w-full gap-3">
               <FormLabel className="text-base-semibold text-light-2">
@@ -150,8 +162,8 @@ const AccountProfile = ({ user, btnTitle }: Props) => {
           )}
         />
         <FormField
-          control={form.control}
           name="username"
+          control={form.control}
           render={({ field }) => (
             <FormItem className="flex flex-col w-full gap-3">
               <FormLabel className="text-base-semibold text-light-2">
@@ -168,8 +180,8 @@ const AccountProfile = ({ user, btnTitle }: Props) => {
           )}
         />
         <FormField
-          control={form.control}
           name="bio"
+          control={form.control}
           render={({ field }) => (
             <FormItem className="flex flex-col w-full gap-3">
               <FormLabel className="text-base-semibold text-light-2">
