@@ -12,6 +12,7 @@ import {
   FormItem,
   FormLabel,
   FormField,
+  FormMessage,
   FormControl,
 } from "@/components/ui/form";
 import { isBase64Image } from "@/lib/utils";
@@ -97,6 +98,12 @@ const AccountProfile = ({ user, btnTitle }: Props) => {
       username: values.username,
       image: values.profile_photo,
     });
+
+    if (pathname === "/profile/edit") {
+      router.back();
+    } else {
+      router.push("/");
+    }
   }
 
   return (
@@ -139,6 +146,7 @@ const AccountProfile = ({ user, btnTitle }: Props) => {
                   onChange={(e) => handleImage(e, field.onChange)}
                 />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />
@@ -158,6 +166,7 @@ const AccountProfile = ({ user, btnTitle }: Props) => {
                   className="account-form_input no-focus"
                 />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />
@@ -176,6 +185,7 @@ const AccountProfile = ({ user, btnTitle }: Props) => {
                   className="account-form_input no-focus"
                 />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />
@@ -194,6 +204,7 @@ const AccountProfile = ({ user, btnTitle }: Props) => {
                   className="account-form_input no-focus"
                 />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />
