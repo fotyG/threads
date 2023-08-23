@@ -7,11 +7,13 @@ type Props = {
   username: string;
   accountId: string;
   authUserId: string;
+  type?: "User" | "Community";
 };
 
 const ProfileHeader = ({
   bio,
   name,
+  type,
   imgUrl,
   username,
   accountId,
